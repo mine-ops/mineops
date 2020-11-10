@@ -1,0 +1,61 @@
+version: "3"
+# Other docker-compose examples in /examples
+
+services:
+  minecraft:
+    build: .
+    ports:
+      - "25565:25565"
+      - "28016:28016"
+      - "4567:4567"
+    networks:
+      - minenet
+    volumes:
+      - "mc:/data"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "testing"
+      RCON_PORT: 25575
+      MOTD: "Welcome to Minecraft Testing Server brought to you by docker-compose and AWS"
+      # enable env variable replacement
+      REPLACE_ENV_VARIABLES: "TRUE"
+      # define an optional prefix for your env variables you want to replace
+      ENV_VARIABLE_PREFIX: "CFG_"
+      # and here are the actual variables
+      CFG_DB_HOST: "http://localhost:3306"
+      CFG_DB_NAME: "minecraft"
+      CFG_DB_PASSWORD_FILE: "/run/secrets/db_password"
+    restart: always
+  rcon:
+    image: itzg/rcon
+    environment: 
+        RWA_RCON_PORT: 25575
+        RWA_RCON_PASSWORD: "testing"
+        RWA_RCON_HOST: "minecraft"
+        RWA_USERNAME: "admin"
+        RWA_PASSWORD: "admin"
+    ports:
+      - "4326:4326"
+      - "4327:4327"
+    volumes:
+      - "rcon:/opt/rcon-web-admin/db"
+    networks:
+      - minenet
+    
+
+volumes:
+  mc:
+  rcon:
+
+secrets:
+  db_password:
+    file: ./db_password
+
+networks:
+  minenet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.220.0/24
