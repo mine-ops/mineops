@@ -3,11 +3,12 @@ version: "3"
 
 services:
   minecraft:
-    build: .
+    build: minecraft/.
     ports:
       - "25565:25565"
       - "28016:28016"
       - "4567:4567"
+      - "25575:25575"
     networks:
       - minenet
     volumes:
@@ -18,7 +19,7 @@ services:
       ENABLE_RCON: "true"
       RCON_PASSWORD: "testing"
       RCON_PORT: 25575
-      MOTD: "Welcome to Minecraft Testing Server brought to you by docker-compose and AWS"
+      MOTD: "dev.franch.toast"
       # enable env variable replacement
       REPLACE_ENV_VARIABLES: "TRUE"
       # define an optional prefix for your env variables you want to replace
@@ -39,6 +40,7 @@ services:
     ports:
       - "4326:4326"
       - "4327:4327"
+      - "25575:25557"
     volumes:
       - "rcon:/opt/rcon-web-admin/db"
     networks:
