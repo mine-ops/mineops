@@ -40,11 +40,12 @@ services:
     ports:
       - "4326:4326"
       - "4327:4327"
-      - "25575:25557"
     volumes:
       - "rcon:/opt/rcon-web-admin/db"
     networks:
       - minenet
+    depends_on: 
+      - minecraft
     
 
 volumes:
