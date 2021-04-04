@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo "Downloading Plugins to Plugins directory"
-      - cd plugins/
+      - cd containers/
       - aws s3 cp s3://k8scraft-plugins plugins/ --recursive
       - echo "Downloading Mods to Mods directory"
       - aws s3 cp s3://k8scraft-mods mods/ --recursive
