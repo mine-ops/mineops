@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Downloading Plugins to Plugins directory"
+      - aws s3 cp s3://k8scraft-plugins containers/minecraft/datapacks/ --recursive
+      - echo "Downloading Mods to Mods directory"
+      - aws s3 cp s3://k8scraft-mods containers/minecraft/mods/ --recursive
+      - ls containers/minecraft/mods/
+      - ls containers/minecraft/plugins/
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - echo $IMAGE_REPO_NAME:$IMAGE_TAG
+      - ls
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f containers/minecraft/Dockerfile containers/minecraft/.
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
