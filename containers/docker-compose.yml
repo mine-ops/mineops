@@ -52,9 +52,9 @@ volumes:
   mc:
   rcon:
 
-secrets:
-  db_password:
-    file: ./db_password
+# secrets:
+#   db_password:
+#     file: ./db_password
 
 networks:
   minenet:
