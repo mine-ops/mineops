@@ -1,4 +1,4 @@
-FROM itzg/minecraft-server:1.16.1
+FROM itzg/minecraft-server
 
 ENV TYPE=PAPER
 
