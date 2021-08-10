@@ -1,4 +1,4 @@
-FROM itzg/minecraft-server:java15
+FROM itzg/minecraft-server:latest
 
 ENV TYPE=PAPER
 
